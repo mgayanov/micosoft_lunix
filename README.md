@@ -119,19 +119,25 @@ sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
 ```
 
 В другом - `gdb`:
-```
+```console
 sudo gdb vmlinux
 (gdb) target remote localhost:1234
 ```
 
 В другом терминале
-```
+```console
 sudo sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
 ```
 А теперь ищем `register_chrdev`
 <p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/uname.jpg">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/chrdev_regexp.jpg">
 </p>
-```
+
+Очевидно, что наш вариант - это __register_chrdev.
+
+Дизассемблируем
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_disas.jpg">
+</p>
 
 
