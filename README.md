@@ -10,7 +10,7 @@
 </p>
 
 Сломаем проверку активации с помощью hex-редактора и заставим скрипт исполнять наши команды. Обратите внимание на то, что
-пришлось урезать строчку `activated` до `activat`, чтобы размер образа остался тем же.
+пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же.
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
