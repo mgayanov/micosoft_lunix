@@ -65,13 +65,14 @@ struct file_operations {
     };
 ```
 
-Нас интересует только функция ```cssize_t (*write) (struct file *, const char *, size_t, loff_t *);```.
+Нас интересует только функция
+```c
+ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
+```
 Здесь второй аргумент - это буфер с переданными данными, следующий - размер буфера.
 
 
-
-
-# Поиск register_chr_dev #
+# Поиск `register_chr_dev`
 
 Найти `register_chr_dev` можно по сигнатуре. А чтобы узнать сигнатуру, скомпилируем новое ядро с включенной отладочной
 информацией. 
