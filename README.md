@@ -72,7 +72,7 @@ ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
 Здесь второй аргумент - это буфер с переданными данными, следующий - размер буфера.
 
 
-# Поиск `register_chr_dev`
+# Поиск `register_chrdev`
 
 По умолчанию, образ `Minimal Linux` компилируется с отключенной отладочной информацией, чтобы уменьшить размер образа,
 minimal же. Поэтому нельзя просто запустить отладчик и найти функцию по названию. Найти ее можно только по сигнатуре.
@@ -90,6 +90,7 @@ git clone https://github.com/ivandavidov/minimal
 cd src
 ```
 3. Корректируем `02_build_kernel.sh`
+
 Это удаляем
 ```
   # Disable debug symbols in kernel => smaller kernel binary.
@@ -104,14 +105,20 @@ echo "CONFIG_GDB_SCRIPTS=y" >> .config
 ./build_minimal_linux_live.sh
 ```
 
-Скомпилированное ядро находится в `minimal/src/work/kernel/linux-5.2.12/vmlinux`, а `iso` образ в `src/minimal_linux_live.iso`.
+Получается образ `src/minimal_linux_live.iso`.
 
-Разархивируем `minimal_linux_live.iso` в папку `src/iso`.
+Разархивируем его в папку `src/iso`.
 
-В `src/iso/boot` лежит ядро `kernel.xz` и рутовая файловая система `rootfs.xz`.
+В `src/iso/boot` теперь лежит архив ядра `kernel.xz`, само ядро `vmlinux` и рутовая файловая система `rootfs.xz`.
 
-Запускаем qemu, gdb
+Посмотрим, что там в ядре.
 
+Запускаем `qemu` в одном терминале:
+```console
+sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
+```
+
+В другом - `gdb`:
 ```
 sudo gdb vmlinux
 (gdb) target remote localhost:1234
@@ -121,36 +128,10 @@ sudo gdb vmlinux
 ```
 sudo sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
 ```
-
-Сходу `register_chr_dev` мы не найдем, потому что сигнатура у нее ничем не примечательна.
-
-Но мы можем найти `chr_dev_init`, которая вызывает `register_chr_dev`.
-
-Ищем сигнатуру `chr_dev_init`
-
-```
-
-(gdb) info functions chr_dev_init
-All functions matching regular expression "chr_dev_init":
-
-Non-debugging symbols:
-0xffffffff829e2cc6  chr_dev_init
-(gdb) disas chr_dev_init
-Dump of assembler code for function chr_dev_init:
-   0xffffffff829e2cc6 <+0>:	push   %rbx
-   0xffffffff829e2cc7 <+1>:	xor    %esi,%esi
-   0xffffffff829e2cc9 <+3>:	mov    $0xffffffff8206fdc0,%r8
-   0xffffffff829e2cd0 <+10>:	mov    $0xffffffff821d7e2e,%rcx
-   0xffffffff829e2cd7 <+17>:	mov    $0x100,%edx
-   0xffffffff829e2cdc <+22>:	mov    $0x1,%edi
-   0xffffffff829e2ce1 <+27>:	callq  0xffffffff811c9720 <__register_chrdev>
-   0xffffffff829e2ce6 <+32>:	test   %eax,%eax
-```
-Инструкции +17 и +22 выглядят уникальными, посмотрим байты
-
-```
-(gdb) x/6bx chr_dev_init+17
-0xffffffff829e2cd7 <chr_dev_init+17>:	0xba	0x00	0x01	0x00	0x00	0xbf
+А теперь ищем `register_chrdev`
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/uname.jpg">
+</p>
 ```
 
 
