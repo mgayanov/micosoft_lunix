@@ -22,6 +22,23 @@
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/uname.jpg">
 </p>
 
+Итак, имеем:
+1. Дистрибутив - Minimal Linux
+2. Проверкой почты, ключа занимается символьное устройство /dev/activate, а значит, что логику проверку нужно искать где-то
+в недрах ядра.
+
+= Символьные устройства и ядро =
+
+Такие устройства как /dev/zero, /dev/null, /dev/activate регистрируются с помощь функции `register_chrdev`
+
+```c
+int register_chrdev (unsigned int   major,
+                     const char *   name,
+                     const struct   fops);
+
+```
+
+
 
 
 # Поиск register_chr_dev #
