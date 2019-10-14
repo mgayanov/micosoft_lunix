@@ -74,31 +74,33 @@ ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
 
 # Поиск `register_chr_dev`
 
-Найти `register_chr_dev` можно по сигнатуре. А чтобы узнать сигнатуру, скомпилируем новое ядро с включенной отладочной
-информацией. 
+По умолчанию, образ `Minimal Linux` компилируется с отключенной отладочной информацией, чтобы уменьшить размер образа,
+minimal же. Поэтому нельзя просто запустить отладчик и найти функцию по названию. Найти ее можно только по сигнатуре.
 
-Компилировать будем такое же ядро, как и в задании, - Minimal Linux Live.
+Но если мы соберем свой образ `Minimal Linux` со всеми названиями функций, то сможем найти там `register_chr_dev` и сигнатуру.
+Поэтому займемся этим.
 
 1. Устанавливаем необходимые инструменты
-```
+```console
 sudo apt install wget make gawk gcc bc bison flex xorriso libelf-dev libssl-dev
 ```
 2. Качаем скрипты
-```
+```console
 git clone https://github.com/ivandavidov/minimal
 cd src
 ```
-3. Находим и удаляем в `02_build_kernel.sh`
+3. Корректируем `02_build_kernel.sh`
+Это удаляем
 ```
   # Disable debug symbols in kernel => smaller kernel binary.
   sed -i "s/^CONFIG_DEBUG_KERNEL.*/\\# CONFIG_DEBUG_KERNEL is not set/" .config
 ```
-4. Добавляем в `02_build_kernel.sh`
+Это добавляем
 ```
 echo "CONFIG_GDB_SCRIPTS=y" >> .config
 ```
-5. Компилируем
-```
+4. Компилируем
+```console
 ./build_minimal_linux_live.sh
 ```
 
