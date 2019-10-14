@@ -27,7 +27,9 @@
 2. Проверкой почты, ключа занимается символьное устройство /dev/activate, а значит, что логику проверку нужно искать где-то
 в недрах ядра.
 
-= Символьные устройства и ядро =
+Образ `target_broken_activation.iso` нам более не потребуется.
+
+# Символьные устройства и ядро
 
 Такие устройства как /dev/zero, /dev/null, /dev/activate регистрируются с помощь функции `register_chrdev`
 
@@ -35,7 +37,31 @@
 int register_chrdev (unsigned int   major,
                      const char *   name,
                      const struct   fops);
+```
 
+`name` - имя, а структура `fops` содержит указатели на функции типа чтение/запись:
+
+```c
+struct file_operations {
+       struct module *owner;
+       loff_t (*llseek) (struct file *, loff_t, int);
+       ssize_t (*read) (struct file *, char *, size_t, loff_t *);
+       ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
+       int (*readdir) (struct file *, void *, filldir_t);
+       unsigned int (*poll) (struct file *, struct poll_table_struct *);
+       int (*ioctl) (struct inode *, struct file *, unsigned int, unsigned long);
+       int (*mmap) (struct file *, struct vm_area_struct *);
+       int (*open) (struct inode *, struct file *);
+       int (*flush) (struct file *);
+       int (*release) (struct inode *, struct file *);
+       int (*fsync) (struct file *, struct dentry *, int datasync);
+       int (*fasync) (int, struct file *, int);
+       int (*lock) (struct file *, int, struct file_lock *);
+    ssize_t (*readv) (struct file *, const struct iovec *, unsigned long,
+          loff_t *);
+    ssize_t (*writev) (struct file *, const struct iovec *, unsigned long,
+          loff_t *);
+    };
 ```
 
 
