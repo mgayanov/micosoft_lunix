@@ -143,26 +143,25 @@ extract-vmlinux kernel.minimal.xz > vmlinux.minimal
 
 Для этого откроем его в hex-редакторе, найдем строчку `APPEND vga=normal` и заменим на `APPEND nokaslr\x20\x20\x20`.
 
+## Ищем и находим сигнатуру `register_chrdev`
 
+Я напоминаю, что схема поиска такая:
 
-Посмотрим, что там в ядре.
+```эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev` ```
 
-Запускаем `qemu` в одном терминале:
+Запускаем в одном терминале свежий `Minimal Linux`:
+
 ```console
 sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
 ```
 
-В другом - `gdb`:
+В другом отладчик:
 ```console
-sudo gdb vmlinux
+sudo gdb vmlinux.minimal
 (gdb) target remote localhost:1234
 ```
 
-В другом терминале
-```console
-sudo sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
-```
-А теперь ищем `register_chrdev`
+А теперь ищем `register_chrdev` в списке функций:
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/chrdev_regexp.jpg">
 </p>
@@ -185,7 +184,7 @@ sudo sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_sig.jpg">
 </p>
 
-Дело в том, что в `target` образе есть только одна функция, которая содержит `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`.
+Дело в том, что в `lunix.iso` есть только одна функция, которая содержит `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`.
 
 Сейчас покажу, но сначала узнаем, в каком сегменте ее искать.
 
@@ -195,26 +194,16 @@ sudo sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr
 
 У функции `__register_chrdev` адрес `0xffffffff811c9720`, это сегмент `.text`. Там и будем искать.
 
-Кстати, нужно оключить kaslr у целевого образа. Сделать это можно в hex-редакторе.
+Отключаемся от эталонного `Minimal Linux`. Подключаемся к `lunix.iso` теперь.
 
-Просто ищем строчку `APPEND vga=normal` и меняем на `APPEND nokaslr\x20\x20\x20`.
-
-Разархивируем в папку `iso`.
-
-Извлекаем ядро из архива
-
+В одном терминале:
 ```console
-extract-vmlinux kernel.xz > vmlinux
-```
-
-Теперь в одном терминале:
-```console
-sudo gdb vmlinux
-(gdb) target remote localhost:1234
+sudo qemu-system-x86_64 lunix_nokaslr.iso -s -enable-kvm
 ```
 В другом:
 ```console
-sudo qemu-system-x86_64 target_nokaslr.iso -s -enable-kvm
+sudo gdb vmlinux.lunix
+(gdb) target remote localhost:1234
 ```
 
 Смотрим границы сегмента `.text`:
@@ -229,7 +218,7 @@ sudo qemu-system-x86_64 target_nokaslr.iso -s -enable-kvm
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_sig_found.jpg">
 </p>
 
-Кусок найден по адресу `0xffffffff810dc643`. Но это только кусок, посмотрим, что выше:
+Кусок находим по адресу `0xffffffff810dc643`. Но это только часть функции, посмотрим, что выше:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_found.jpg">
