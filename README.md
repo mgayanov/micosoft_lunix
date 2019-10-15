@@ -9,12 +9,13 @@
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/binwalk.jpg">
 </p>
 
-Сломаем проверку активации с помощью hex-редактора и заставим скрипт исполнять наши команды. Обратите внимание на то, что
-пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `target_broken_activation.iso`.
+Сломаем проверку активации с помощью hex-редактора и заставим скрипт исполнять наши команды. Как он теперь выглядит:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
 </p>
+
+Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `target_broken_activation.iso`. 
 
 Запускаем образ через qemu:
 
