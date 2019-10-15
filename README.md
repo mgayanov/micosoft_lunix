@@ -10,13 +10,19 @@
 </p>
 
 Сломаем проверку активации с помощью hex-редактора и заставим скрипт исполнять наши команды. Обратите внимание на то, что
-пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же.
+пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `target_broken_activation.iso`.
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
 </p>
 
-Запускаем образ через qemu, вводим /bin/sh, uname -a, и узнаем, что наш дистрибутив - Minimal Linux 5.0.11
+Запускаем образ через qemu:
+
+```console
+sudo qemu-system-x86_64 target_broken_activation.iso --enable-kvm
+```
+
+Вводим `/bin/sh`, `uname -a`, `ls -la /dev/activate`, и узнаем, что наш дистрибутив - `Minimal Linux 5.0.11`
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/uname.jpg">
@@ -24,7 +30,7 @@
 
 Итак, имеем:
 1. Дистрибутив - `Minimal Linux`.
-2. Проверкой почты, ключа занимается символьное устройство `/dev/activate`, а значит, логику проверку нужно искать где-то
+2. Проверкой почты, ключа занимается символьное устройство `/dev/activate`, а значит, логику проверки нужно искать где-то
 в недрах ядра.
 3. Почта, ключ передаются в формате `email|key`.
 
