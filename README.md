@@ -88,7 +88,9 @@ minimal же. Поэтому нельзя просто запустить отл
 
 То есть схема такая:
 
-эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev`.
+```
+эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev` в `Lunix`
+```
 
 ## Готовим свежий образ `Minimal Linux`
 
@@ -147,7 +149,9 @@ extract-vmlinux kernel.minimal.xz > vmlinux.minimal
 
 Я напоминаю, что схема поиска такая:
 
-```эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev` ```
+```
+эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev` в `Lunix`
+```
 
 Запускаем в одном терминале свежий `Minimal Linux`:
 
