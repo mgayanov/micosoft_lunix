@@ -344,7 +344,7 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 
 Позволим функции завершиться и остановимся сразу после: FFFFFFFF811F074D
 <p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_t.jpg">
 </p>
 
 ```python
