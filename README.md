@@ -39,7 +39,7 @@ sudo qemu-system-x86_64 target_broken_activation.iso --enable-kvm
 
 # Символьные устройства и ядро
 
-Такие устройства как `/dev/zero`, `/dev/null`, `/dev/activate` регистрируются с помощь функции `register_chrdev`:
+Такие устройства как `/dev/zero`, `/dev/null`, `/dev/activate` и т.д. регистрируются с помощь функции `register_chrdev`:
 
 ```c
 int register_chrdev (unsigned int   major,
