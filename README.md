@@ -15,7 +15,7 @@
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
 </p>
 
-Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `lunix_broken_activation.iso`. 
+Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. К счастью, проверки хэш-суммы нет. Образ назовем `lunix_broken_activation.iso`. 
 
 Запускаем его через qemu:
 
