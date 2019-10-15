@@ -353,3 +353,37 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
 >>>
 ```
+В общем это хэш от байта
+
+Посмотрим, какие аргументы будут переданы в следующий раз и что будет на выходе
+
+
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+</p>
+
+Хэши складываются по байтно, если сумма > 0xEC, то % 0xEC. Сохраняется в `FFFFFFFF81C82F80`
+
+Проверим, ставим брейк на FFFFFFFF811F0748
+
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/sum2hash.jpg">
+</p>
+
+Второй символ `e`
+```python
+>>> hashlib.sha256(b"e").digest().hex()
+'3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea'
+```
+
+А конечный хэш можно узнать на адресе FFFFFFFF811F0789, это выход из циклов
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/test_final_hash.jpg">
+</p>
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/last_op.jpg">
+</p>
