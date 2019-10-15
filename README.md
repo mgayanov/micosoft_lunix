@@ -9,7 +9,7 @@
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/binwalk.jpg">
 </p>
 
-Сломаем проверку с помощью hex-редактора и заставим скрипт исполнять наши команды. Как он теперь выглядит:
+Сломаем проверку с помощью hex-редактора прямо в образе и заставим скрипт исполнять наши команды. Как он теперь выглядит:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
