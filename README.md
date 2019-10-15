@@ -186,7 +186,7 @@ sudo qemu-system-x86_64 target_nokaslr.iso -s -enable-kvm
 Смотрим границы сегмента `.text`:
 
 <p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/minimal_segments.jpg">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/target_segments.jpg">
 </p>
 
 Границы `0xffffffff81000000 - 0xffffffff81600b91`, там и будем искать сигнатуру `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`:
