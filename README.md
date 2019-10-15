@@ -167,12 +167,12 @@ sudo gdb vmlinux.minimal
 (gdb) target remote localhost:1234
 ```
 
-А теперь ищем `register_chrdev` в списке функций:
+А теперь ищем `register_chrdev` в списке функций(`(gdb) info functions register_chrdev`):
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/chrdev_regexp.jpg">
 </p>
 
-Очевидно, что наш вариант - это __register_chrdev.
+Очевидно, что наш вариант - это `__register_chrdev`.
 
 Дизассемблируем:
 <p align="center">
