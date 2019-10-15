@@ -128,7 +128,7 @@ echo "CONFIG_GDB_SCRIPTS=y" >> .config
 Помимо этого нужно вытащить ядро из образа. В этом поможет скрипт [extract-vmlinux](https://github.com/torvalds/linux/blob/master/scripts/extract-vmlinux):
 
 ```console
-extract-vmlinux kernel.xz > vmlinux.minimal
+extract-vmlinux kernel.minimal.xz > vmlinux.minimal
 ```
 
 Теперь в папке `minimal/src/iso/boot` у нас такой набор: `kernel.minimal.xz`, `rootfs.minimal.xz`, `vmlinux.minimal`.
