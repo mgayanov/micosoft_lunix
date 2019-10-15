@@ -190,7 +190,7 @@ sudo gdb vmlinux.minimal
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_sig.jpg">
 </p>
 
-Дело в том, что в `lunix.iso` есть только одна функция, которая содержит `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`.
+Дело в том, что в `lunix` есть только одна функция, которая содержит `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`.
 
 Сейчас покажу, но сначала узнаем, в каком сегменте ее искать.
 
@@ -200,7 +200,7 @@ sudo gdb vmlinux.minimal
 
 У функции `__register_chrdev` адрес `0xffffffff811c9720`, это сегмент `.text`. Там и будем искать.
 
-Отключаемся от эталонного `Minimal Linux`. Подключаемся к `lunix.iso` теперь.
+Отключаемся от эталонного `Minimal Linux`. Подключаемся к `lunix` теперь.
 
 В одном терминале:
 ```console
