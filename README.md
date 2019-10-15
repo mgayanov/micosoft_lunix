@@ -145,6 +145,8 @@ extract-vmlinux kernel.minimal.xz > vmlinux.minimal
 
 Для этого откроем его в hex-редакторе, найдем строчку `APPEND vga=normal` и заменим на `APPEND nokaslr\x20\x20\x20`.
 
+А образ назовем `lunix_nokaslr.iso`.
+
 ## Ищем и находим сигнатуру `register_chrdev`
 
 Я напоминаю, что схема поиска такая:
@@ -156,7 +158,7 @@ extract-vmlinux kernel.minimal.xz > vmlinux.minimal
 Запускаем в одном терминале свежий `Minimal Linux`:
 
 ```console
-sudo qemu-system-x86_64 -kernel kernel.xz -initrd rootfs.xz -append nokaslr -s
+sudo qemu-system-x86_64 -kernel kernel.minimal.xz -initrd rootfs.minimal.xz -append nokaslr -s
 ```
 
 В другом отладчик:
