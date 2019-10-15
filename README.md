@@ -20,7 +20,7 @@
 Запускаем его через qemu:
 
 ```console
-sudo qemu-system-x86_64 lunix_broken_activation.iso --enable-kvm
+sudo qemu-system-x86_64 lunix_broken_activation.iso -enable-kvm
 ```
 
 Покопаемся внутри: вводим `/bin/sh`, `uname -a`, `ls -la /dev/activate`.
