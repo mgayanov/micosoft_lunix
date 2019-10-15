@@ -17,20 +17,20 @@
 
 Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `target_broken_activation.iso`. 
 
-Запускаем образ через qemu:
+Запускаем его через qemu:
 
 ```console
 sudo qemu-system-x86_64 target_broken_activation.iso --enable-kvm
 ```
 
-Вводим `/bin/sh`, `uname -a`, `ls -la /dev/activate`, и узнаем, что наш дистрибутив - `Minimal Linux 5.0.11`
+Покопаемся внутри: вводим `/bin/sh`, `uname -a`, `ls -la /dev/activate`.
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/uname.jpg">
 </p>
 
 Итак, имеем:
-1. Дистрибутив - `Minimal Linux`.
+1. Дистрибутив - `Minimal Linux 5.0.11`.
 2. Проверкой почты, ключа занимается символьное устройство `/dev/activate`, а значит, логику проверки нужно искать где-то
 в недрах ядра.
 3. Почта, ключ передаются в формате `email|key`.
