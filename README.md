@@ -3,24 +3,24 @@
 
 # Осматриваем образ #
 
-Воспользовавшись `binwalk`, видим, что имеется `sh` скрипт по смещению `0x413000`. Этот скрипт проверяет активацию.
+Воспользовавшись `binwalk`, видим, что имеется `sh` скрипт по смещению `0x413000`. Этот скрипт проверяет почту и ключ.
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/binwalk.jpg">
 </p>
 
-Сломаем проверку активации с помощью hex-редактора и заставим скрипт исполнять наши команды. Как он теперь выглядит:
+Сломаем проверку с помощью hex-редактора и заставим скрипт исполнять наши команды. Как он теперь выглядит:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/broken_script.jpg">
 </p>
 
-Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `target_broken_activation.iso`. 
+Обратите внимание на то, что пришлось урезать строчку `activated` до `activ`, чтобы размер образа остался тем же. Образ назовем `lunix_broken_activation.iso`. 
 
 Запускаем его через qemu:
 
 ```console
-sudo qemu-system-x86_64 target_broken_activation.iso --enable-kvm
+sudo qemu-system-x86_64 lunix_broken_activation.iso --enable-kvm
 ```
 
 Покопаемся внутри: вводим `/bin/sh`, `uname -a`, `ls -la /dev/activate`.
