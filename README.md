@@ -255,8 +255,10 @@ int register_chrdev (unsigned int   major,
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/activate_dev_found.jpg">
 </p>
 
-То, что указатель на имя хранится в регистре rcx, я выяснил простым перебором. Как и указатель на fops - он в регистре r8
+То, что указатель на имя хранится в регистре rcx, я выяснил простым перебором. Как и указатель на fops - он в регистре r8:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/fops.jpg">
 </p>
+
+Итак, функция write `0xffffffff811f068f`
