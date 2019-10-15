@@ -123,7 +123,7 @@ echo "CONFIG_GDB_SCRIPTS=y" >> .config
 
 Разархивируем `minimal_linux_live.iso` в папку `minimal/src/iso`.
 
-В `minimal/src/iso/boot` теперь лежат образ ядра `kernel.xz` и образ ФС `rootfs.xz`. Переименуем их в `kernel.minimal.xz`, `rootfs.minimal.xz`
+В `minimal/src/iso/boot` лежат образ ядра `kernel.xz` и образ ФС `rootfs.xz`. Переименуем их в `kernel.minimal.xz`, `rootfs.minimal.xz`
 
 Помимо этого нужно вытащить ядро из образа. В этом поможет скрипт [extract-vmlinux](https://github.com/torvalds/linux/blob/master/scripts/extract-vmlinux):
 
