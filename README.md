@@ -39,7 +39,7 @@ sudo qemu-system-x86_64 target_broken_activation.iso --enable-kvm
 
 # Символьные устройства и ядро
 
-Такие устройства как `/dev/zero`, `/dev/null`, `/dev/activate` регистрируются с помощь функции `register_chrdev`
+Такие устройства как `/dev/zero`, `/dev/null`, `/dev/activate` регистрируются с помощь функции `register_chrdev`:
 
 ```c
 int register_chrdev (unsigned int   major,
@@ -47,7 +47,7 @@ int register_chrdev (unsigned int   major,
                      const struct   fops);
 ```
 
-`name` - имя, а структура `fops` содержит указатели на функции типа чтение/запись:
+`name` - имя, а структура `fops` содержит указатели на функции типа `read`/`write`:
 
 ```c
 struct file_operations {
@@ -81,22 +81,27 @@ ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
 
 # Поиск `register_chrdev`
 
-По умолчанию, образ `Minimal Linux` компилируется с отключенной отладочной информацией, чтобы уменьшить размер образа,
+По умолчанию, `Minimal Linux` компилируется с отключенной отладочной информацией, чтобы уменьшить размер образа,
 minimal же. Поэтому нельзя просто запустить отладчик и найти функцию по названию. Найти ее можно только по сигнатуре.
 
-Но если мы соберем свой образ `Minimal Linux` со всеми названиями функций, то сможем найти там `register_chr_dev` и сигнатуру.
-Поэтому займемся этим.
+А сигнатуру можно взять из свежего образа `Minimal Linux` c включенной отладочной информацией.
 
-1. Устанавливаем необходимые инструменты
+То есть схема такая:
+
+эталонный `Minimal Linux` -> известный адрес `register_chrdev` -> сигнатура -> искомый адрес `register_chrdev`.
+
+## Готовим свежий образ `Minimal Linux`
+
+1. Устанавливаем необходимые инструменты:
 ```console
 sudo apt install wget make gawk gcc bc bison flex xorriso libelf-dev libssl-dev
 ```
-2. Качаем скрипты
+2. Качаем скрипты:
 ```console
 git clone https://github.com/ivandavidov/minimal
 cd src
 ```
-3. Корректируем `02_build_kernel.sh`
+3. Корректируем `02_build_kernel.sh`:
 
 Это удаляем
 ```
@@ -112,11 +117,33 @@ echo "CONFIG_GDB_SCRIPTS=y" >> .config
 ./build_minimal_linux_live.sh
 ```
 
-Получается образ `src/minimal_linux_live.iso`.
+Получается образ `minimal/src/minimal_linux_live.iso`.
 
-Разархивируем его в папку `src/iso`.
+## Еще немного приготовлений
 
-В `src/iso/boot` теперь лежит архив ядра `kernel.xz`, само ядро `vmlinux` и рутовая файловая система `rootfs.xz`.
+Разархивируем `minimal_linux_live.iso` в папку `minimal/src/iso`.
+
+В `minimal/src/iso/boot` теперь лежат образ ядра `kernel.xz` и образ ФС `rootfs.xz`. Переименуем их в `kernel.minimal.xz`, `rootfs.minimal.xz`
+
+Помимо этого нужно вытащить ядро из образа. В этом поможет скрипт [extract-vmlinux](https://github.com/torvalds/linux/blob/master/scripts/extract-vmlinux):
+
+```console
+extract-vmlinux kernel.xz > vmlinux.minimal
+```
+
+Теперь в папке `minimal/src/iso/boot` у нас такой набор: `kernel.minimal.xz`, `rootfs.minimal.xz`, `vmlinux.minimal`.
+
+А вот из `lunix.iso` нам нужно только ядро. Поэтому проводим все те же операции, ядро называем `vmlinux.lunix`, про `kernel.xz`, `rootfs.xz` забываем, сейчас расскажу почему. 
+
+## Отключаем KASLR в `lunix.iso`
+
+У меня получилось отключить `KASLR` в случае со свежесобранным `Minimal Linux` в `QEMU`.
+
+Но не получилось с `Lunix`. Поэтому придется править сам образ.
+
+Для этого откроем его в hex-редакторе, найдем строчку `APPEND vga=normal` и заменим на `APPEND nokaslr\x20\x20\x20`.
+
+
 
 Посмотрим, что там в ядре.
 
