@@ -231,3 +231,26 @@ sudo gdb vmlinux.lunix
 </p>
 
 А вот и начало функции `0xffffffff810dc5d0`.
+
+# Поиск интерфейса /dev/activate
+
+Прототип функции 
+
+```c
+int register_chrdev (unsigned int   major,
+                     const char *   name,
+                     const struct   fops);
+```
+
+Ищем fops
+
+Запускаем отладчик, образ
+Немного отпускаем, останавливаемся
+
+Ставим брейк на `0xffffffff810dc5d0`
+
+Брейк сработает несколько раз. Это просыпаются устройства `mem`, vcs, cpu/msr, cpu/cpuid, а сразу за ними и наш activate.
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/activate_dev_found.jpg">
+</p>
