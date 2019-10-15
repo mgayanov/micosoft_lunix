@@ -72,7 +72,7 @@ struct file_operations {
     };
 ```
 
-Нас интересует только функция
+Нас интересует только функция:
 ```c
 ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
 ```
