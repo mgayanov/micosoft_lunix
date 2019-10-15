@@ -99,7 +99,7 @@ sudo apt install wget make gawk gcc bc bison flex xorriso libelf-dev libssl-dev
 2. Качаем скрипты:
 ```console
 git clone https://github.com/ivandavidov/minimal
-cd src
+cd minimal/src
 ```
 3. Корректируем `02_build_kernel.sh`:
 
