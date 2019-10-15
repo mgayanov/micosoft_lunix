@@ -284,3 +284,72 @@ int register_chrdev (unsigned int   major,
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/first_break.jpg">
 </p>
+
+*(rdi) = *(rsi) 0xffff8880077d5e60
+
+Брейк на rdi
+
+Остановка
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/2_break.jpg">
+</p>
+
+Проверка на нули, т.к. rax = 0
+
+Следующая остановка `0xffffffff811f083c`
+
+Я открыл функцию write в ida
+
+Там много всего, проверка на нули, парсинг почты, ключа и т.д.
+
+Мое внимание привлек этот кусок
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_susp_func.jpg">
+</p>
+
+Это адрес `FFFFFFFF811F0748`
+
+Во-первых, что еще за функция, и во-вторых что за аргументы?
+Ставим брейк на FFFFFFFF811F0748
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/susp_func_rsi_rdi.jpg">
+</p>
+
+Первый байт почты, и нули
+
+Заглянем внутрь функции
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table.jpg">
+</p>
+
+Меня привлекла инструкция
+```asm
+mov     rsi, offset unk_FFFFFFFF81829CE0
+```
+
+Узнаем, что в `FFFFFFFF81829CE0`
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
+</p>
+
+А это таблица для вычисления sha256
+
+Предположим, что функция вычисляет хэш для каждого байта, а что в буфере(второй аргумент)?
+
+Сейчас мы на FFFFFFFF811F0748
+
+Позволим функции завершиться и остановимся сразу после: FFFFFFFF811F074D
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
+</p>
+
+```python
+>>> import hashlib
+>>> hashlib.sha256(b"t").digest().hex()
+'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
+>>>
+```
