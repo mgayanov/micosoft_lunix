@@ -262,3 +262,25 @@ int register_chrdev (unsigned int   major,
 </p>
 
 Итак, функция write `0xffffffff811f068f`
+
+Перезапускаем отладчик и образ, у меня почему-то ошибка
+
+Ставим на нее брейк, а предыдущий удаляем и жмем C
+
+Вводим почту test@mail.ru
+Пароль 1234-5678-0912-3456
+
+Пробежавшись по регистрам, я увидел, что rsi хранит указатель на строку `test@mail.ru|1234-5678-0912-3456`
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/write_rsi.jpg">
+</p>
+
+Ставим брейк на чтение rsi, в моем случае это `0x557d32a7ca90`
+
+Брейк срабатывает на инструкции `0xffffffff813b26dc`
+
+Что там:
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/first_break.jpg">
+</p>
