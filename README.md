@@ -47,7 +47,7 @@ int register_chrdev (unsigned int   major,
                      const struct   fops);
 ```
 
-`name` - имя, а структура `fops` содержит указатели на функции типа `read`/`write`:
+`name` - имя, а структура `fops` содержит указатели на функции драйвера:
 
 ```c
 struct file_operations {
