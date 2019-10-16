@@ -297,7 +297,7 @@ struct file_operations {
 
 Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
 
-Первыми обращают на себя внимание блоки:
+Первым обращает на себя внимание этот цикл:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
