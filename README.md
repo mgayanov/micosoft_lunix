@@ -380,7 +380,9 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
 >>>
 ```
-</datails>
+
+
+
 В общем это хэш от байта
 
 Посмотрим, какие аргументы будут переданы в следующий раз и что будет на выходе
@@ -415,3 +417,15 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/last_op.jpg">
 </p>
+</datails>
+
+## Хэш функция
+
+Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
+
+Есть интересный кусок здесь:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+</p>
+
