@@ -357,11 +357,11 @@ def get_email_hash(email):
 	return h
 ```
 
-Сумма сохраняется по адресу `0xFFFFFFFF81C82F80`.
+Сумма сохраняется по адресу `0xffffffff81c82f80`.
 
 Давайте посмотрим, какой будет хэш от почты `test@mail.ru`.
 
-Ставим брейк на `0xFFFFFFFF811F0789`, это выход из циклов:
+Ставим брейк на `0xffffffff811f077e inc rbx`, это выход из цикла:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/test_final_hash.jpg">
