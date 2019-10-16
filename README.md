@@ -295,10 +295,22 @@ struct file_operations {
 
 Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
 
-Есть интересный кусок здесь:
+Первым обращает на себя внимание блок:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+</p>
+
+В нем вызывается какая-то функция ` sub_FFFFFFFF811F0413`, которая начинается вот так:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table.jpg">
+</p>
+
+А по адресу `0xFFFFFFFF81829CE0` обнаруживается таблица для `sha256`:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
 </p>
 
 
