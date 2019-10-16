@@ -385,6 +385,8 @@ def get_email_hash(email):
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/key_algo.jpg">
 </p>
 
+Вот здесь идет конечное вычисление каждого байта:
+
 ```asm
 0xFFFFFFFF811F0943 imul eax, r12d
 0xFFFFFFFF811F0947 cdq
@@ -398,6 +400,27 @@ def get_email_hash(email):
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/key_algo2.jpg">
 </p>
+
+А байты берутся в неожиданном порядке. Я указал его в кейгене:
+
+```python
+def keygen(email_hash):
+	pairs = [(0x00, 0x1c), (0x1f, 0x03), (0x01, 0x1d), (0x1e, 0x02),
+		 (0x04, 0x18), (0x1b, 0x07), (0x05, 0x19), (0x1a, 0x06),
+		 (0x08, 0x14), (0x17, 0x0b), (0x09, 0x15), (0x16, 0x0a),
+		 (0x0c, 0x10), (0x13, 0x0f), (0x0d, 0x11), (0x12, 0x0e)]
+
+	key = []
+
+	for pair in pairs:
+		i = pair[0]
+		j = pair[1]
+		key.append((email_hash[i] * email_hash[j])%9)
+
+	return key
+```
+
+Итак, давайте сгенерируем какой-нибудь ключ:
 
 
 
