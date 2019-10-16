@@ -367,10 +367,10 @@ def get_email_hash(email):
 
 Давайте посмотрим, какой будет хэш от почты `test@mail.ru`.
 
-Ставим брейк на `0xFFFFFFFF811F0748`:
+Ставим брейк на `0xFFFFFFFF811F0789`, это выход из циклов:
 
 <p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/test_final_hash.jpg">
 </p>
 
 И проверяем:
