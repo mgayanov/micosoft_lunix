@@ -174,6 +174,8 @@ sudo gdb vmlinux.minimal
 
 Очевидно, что наш вариант - это `__register_chrdev`.
 
+[Нас не смущает, что искали `register_chrdev`, а нашли `__register_chrdev`](https://github.com/torvalds/linux/blob/298fb76a5583900a155d387efaf37a8b39e5dea2/include/linux/fs.h#L2673)
+
 Дизассемблируем:
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_disas.jpg">
