@@ -295,13 +295,13 @@ struct file_operations {
 
 Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
 
-Первым обращает на себя внимание блок:
+Первыми обращают на себя внимание блоки:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
 </p>
 
-В нем вызывается какая-то функция ` sub_FFFFFFFF811F0413`, которая начинается вот так:
+Здесь вызывается какая-то функция `sub_FFFFFFFF811F0413`, которая начинается так:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table.jpg">
@@ -311,6 +311,16 @@ struct file_operations {
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
+</p>
+
+То есть `sub_FFFFFFFF811F0413` = `sha256` Байты, хэш которых нужно получить, передаются через `$sp+0x50+var49`, а результат сохраняется по адресу `$sp+0x50+var48`.  Кстати, `var49=-0x49`, `var48=-0x48`.
+
+Проверим.
+
+Запускаем qemu, gdb, ставим брейк на `0xFFFFFFFF811F0748`, вводим почту test@mail.ru, пароль 1234-5678-0912-3456:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/susp_func_rsi_rdi.jpg">
 </p>
 
 
