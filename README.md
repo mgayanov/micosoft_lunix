@@ -289,7 +289,7 @@ struct file_operations {
 Итак, адрес функции `write` `0xffffffff811f068f`.
 
 # Изучаем `write`
-
+<details><summary>raw</summary>
 Перезапускаем
 
 Ставим брейк на `0xffffffff811f068f`.
@@ -380,6 +380,7 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
 >>>
 ```
+</datails>
 В общем это хэш от байта
 
 Посмотрим, какие аргументы будут переданы в следующий раз и что будет на выходе
