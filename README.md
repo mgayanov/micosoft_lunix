@@ -220,7 +220,7 @@ sudo gdb vmlinux.lunix
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/target_segments.jpg">
 </p>
 
-Границы `0xffffffff81000000 - 0xffffffff81600b91`, там и будем искать сигнатуру `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`:
+Границы `0xffffffff81000000 - 0xffffffff81600b91`, ищем `0xc1, 0xe6, 0x14, 0x44, 0x09, 0xe6`:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_sig_found.jpg">
@@ -232,9 +232,9 @@ sudo gdb vmlinux.lunix
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/reg_chrdev_found.jpg">
 </p>
 
-А вот и начало функции `0xffffffff810dc5d0`.
+А вот и начало функции `0xffffffff810dc5d0`(`retq` - это выход из соседней функции).
 
-# Поиск интерфейса /dev/activate
+# Поиск fops от /dev/activate
 
 Прототип функции 
 
@@ -244,24 +244,47 @@ int register_chrdev (unsigned int   major,
                      const struct   fops);
 ```
 
-Ищем fops
 
-Запускаем отладчик, образ
-Немного отпускаем, останавливаемся
 
-Ставим брейк на `0xffffffff810dc5d0`
+Ставим брейк на `0xffffffff810dc5d0`.
 
-Брейк сработает несколько раз. Это просыпаются устройства `mem`, vcs, cpu/msr, cpu/cpuid, а сразу за ними и наш activate.
+Брейк сработает несколько раз. Это просыпаются устройства `mem`, `vcs`, `cpu/msr`, `cpu/cpuid`, а сразу за ними и наш `activate`.
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/activate_dev_found.jpg">
 </p>
 
-То, что указатель на имя хранится в регистре rcx, я выяснил простым перебором. Как и указатель на fops - он в регистре r8:
+То, что указатель на имя хранится в регистре `rcx`, я выяснил простым перебором. А указатель на fops - в `r8`:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/fops.jpg">
 </p>
+
+<details><summary>Напоминаю структуру fops</summary>
+
+```c
+struct file_operations {
+       struct module *owner;
+       loff_t (*llseek) (struct file *, loff_t, int);
+       ssize_t (*read) (struct file *, char *, size_t, loff_t *);
+       ssize_t (*write) (struct file *, const char *, size_t, loff_t *);
+       int (*readdir) (struct file *, void *, filldir_t);
+       unsigned int (*poll) (struct file *, struct poll_table_struct *);
+       int (*ioctl) (struct inode *, struct file *, unsigned int, unsigned long);
+       int (*mmap) (struct file *, struct vm_area_struct *);
+       int (*open) (struct inode *, struct file *);
+       int (*flush) (struct file *);
+       int (*release) (struct inode *, struct file *);
+       int (*fsync) (struct file *, struct dentry *, int datasync);
+       int (*fasync) (int, struct file *, int);
+       int (*lock) (struct file *, int, struct file_lock *);
+    ssize_t (*readv) (struct file *, const struct iovec *, unsigned long,
+          loff_t *);
+    ssize_t (*writev) (struct file *, const struct iovec *, unsigned long,
+          loff_t *);
+    };
+```
+</details>
 
 Итак, функция write `0xffffffff811f068f`
 
