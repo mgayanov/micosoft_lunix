@@ -375,136 +375,21 @@ def get_email_hash(email):
 2b902daf5cc483159b0a2f7ed6b593d1d56216a61eab53c8e4b9b9341fb14880
 ```
 
+Но сам явно длинноват для ключа.
 
-<details><summary>raw</summary>
-Перезапускаем
+## Алгоритм генерации ключа
 
-Ставим брейк на `0xffffffff811f068f`.
-
-Вводим почту test@mail.ru
-
-Пароль 1234-5678-0912-3456
-
-Пробежавшись по регистрам, я увидел, что данные передаются через регистр `rsi`:
+За ключ отвечает этот код:
 
 <p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/write_rsi.jpg">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/key_algo.jpg">
 </p>
 
-Ставим брейк на чтение `rsi`, в моем случае это `0x557d32a7ca90`
-
-Брейк срабатывает на инструкции `0xffffffff813b26dc`
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/first_break.jpg">
-</p>
-
-*(rdi) = *(rsi) 0xffff8880077d5e60
-
-Брейк на rdi
-
-Остановка
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/2_break.jpg">
-</p>
-
-Проверка на нули, т.к. rax = 0
-
-Следующая остановка `0xffffffff811f083c`
-
-Я открыл функцию write в ida
-
-Там много всего, проверка на нули, парсинг почты, ключа и т.д.
-
-Мое внимание привлек этот кусок
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_susp_func.jpg">
-</p>
-
-Это адрес `FFFFFFFF811F0748`
-
-Во-первых, что еще за функция, и во-вторых что за аргументы?
-Ставим брейк на FFFFFFFF811F0748
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/susp_func_rsi_rdi.jpg">
-</p>
-
-Первый байт почты, и нули
-
-Заглянем внутрь функции
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table.jpg">
-</p>
-
-Меня привлекла инструкция
-```asm
-mov     rsi, offset unk_FFFFFFFF81829CE0
-```
-
-Узнаем, что в `FFFFFFFF81829CE0`
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
-</p>
-
-А это таблица для вычисления sha256
-
-Предположим, что функция вычисляет хэш для каждого байта, а что в буфере(второй аргумент)?
-
-Сейчас мы на FFFFFFFF811F0748
-
-Позволим функции завершиться и остановимся сразу после: FFFFFFFF811F074D
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_t.jpg">
-</p>
-
-```python
->>> import hashlib
->>> hashlib.sha256(b"t").digest().hex()
-'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
->>>
-```
 
 
 
-В общем это хэш от байта
-
-Посмотрим, какие аргументы будут переданы в следующий раз и что будет на выходе
 
 
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
-</p>
-
-Хэши складываются по байтно, если сумма > 0xEC, то % 0xEC. Сохраняется в `FFFFFFFF81C82F80`
-
-Проверим, ставим брейк на FFFFFFFF811F0748
-
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/sum2hash.jpg">
-</p>
-
-Второй символ `e`
-```python
->>> hashlib.sha256(b"e").digest().hex()
-'3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea'
-```
-
-А конечный хэш можно узнать на адресе FFFFFFFF811F0789, это выход из циклов
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/test_final_hash.jpg">
-</p>
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/last_op.jpg">
-</p>
-</datails>
 
 
 
