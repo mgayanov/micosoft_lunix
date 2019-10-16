@@ -307,17 +307,17 @@ struct file_operations {
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table.jpg">
 </p>
 
-А по адресу `0xFFFFFFFF81829CE0` обнаруживается таблица для `sha256`:
+А по адресу `0xffffffff81829ce0` обнаруживается таблица для `sha256`:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_table2.jpg">
 </p>
 
-То есть `sub_FFFFFFFF811F0413` = `sha256` Байты, хэш которых нужно получить, передаются через `$sp+0x50+var49`, а результат сохраняется по адресу `$sp+0x50+var48`.  Кстати, `var49=-0x49`, `var48=-0x48`.
+То есть `sub_FFFFFFFF811F0413` = `sha256` Байты, хэш которых нужно получить, передаются через `$sp+0x50+var49`, а результат сохраняется по адресу `$sp+0x50+var48`.  Кстати, `var49=-0x49`, `var48=-0x48`, так что `$sp+0x50+var49` = `$sp+0x7`, `$sp+0x50+var48` = `$sp+0x8`.
 
 Проверим.
 
-Запускаем `qemu`, `gdb`, ставим брейк на начало функции`0xFFFFFFFF811F0748` и на инструкцию `0xFFFFFFFF811F074D` после, вводим почту test@mail.ru, пароль 1234-5678-0912-3456.
+Запускаем `qemu`, `gdb`, ставим брейк на`0xffffffff811f0748 call sub_FFFFFFFF811F0413` и на инструкцию `0xffffffff811f074d xor     ecx, ecx` после, вводим почту `test@mail.ru`, пароль `1234-5678-0912-3456`.
 
 В функцию передается байт почты:
 
