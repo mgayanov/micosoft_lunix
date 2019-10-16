@@ -284,11 +284,24 @@ struct file_operations {
           loff_t *);
     };
 ```
+
 </details>
 
 Итак, адрес функции `write` `0xffffffff811f068f`.
 
 # Изучаем `write`
+
+## Хэш функция
+
+Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
+
+Есть интересный кусок здесь:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+</p>
+
+
 <details><summary>raw</summary>
 Перезапускаем
 
@@ -419,13 +432,5 @@ mov     rsi, offset unk_FFFFFFFF81829CE0
 </p>
 </datails>
 
-## Хэш функция
 
-Откроем IDA, загрузим ядро и посмотрим, что внутри функции `write`.
-
-Есть интересный кусок здесь:
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
-</p>
 
