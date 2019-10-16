@@ -317,11 +317,26 @@ struct file_operations {
 
 Проверим.
 
-Запускаем qemu, gdb, ставим брейк на `0xFFFFFFFF811F0748`, вводим почту test@mail.ru, пароль 1234-5678-0912-3456:
+Запускаем qemu, gdb, ставим брейк на начало функции`0xFFFFFFFF811F0748` и на инструкцию `0xFFFFFFFF811F074D` после, вводим почту test@mail.ru, пароль 1234-5678-0912-3456.
+
+В функцию передается байт почты:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/susp_func_rsi_rdi.jpg">
 </p>
+
+Результат:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_t.jpg">
+</p>
+
+```python
+>>> import hashlib
+>>> hashlib.sha256(b"t").digest().hex()
+'e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8'
+>>>
+```
 
 
 <details><summary>raw</summary>
