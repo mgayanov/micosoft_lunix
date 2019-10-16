@@ -385,7 +385,19 @@ def get_email_hash(email):
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/key_algo.jpg">
 </p>
 
+```asm
+0xFFFFFFFF811F0943 imul eax, r12d
+0xFFFFFFFF811F0947 cdq
+0xFFFFFFFF811F0948 idiv r10d
+```
 
+В `eax` и `r12d` байты хэша, они перемножаются, а потом берется остаток от деления на 9.
+
+Потому что
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/key_algo2.jpg">
+</p>
 
 
 
