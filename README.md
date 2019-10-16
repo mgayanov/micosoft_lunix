@@ -319,13 +319,7 @@ struct file_operations {
 
 Запускаем `qemu`, `gdb`, ставим брейк на`0xffffffff811f0748 call sub_FFFFFFFF811F0413` и на инструкцию `0xffffffff811f074d xor     ecx, ecx` после, вводим почту `test@mail.ru`, пароль `1234-5678-0912-3456`.
 
-В функцию передается байт почты:
-
-<p align="center">
-	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/susp_func_rsi_rdi.jpg">
-</p>
-
-Результат:
+В функцию передается байт почты, а результат такой:
 
 <p align="center">
 	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/hash_t.jpg">
