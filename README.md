@@ -342,7 +342,43 @@ struct file_operations {
 
 Дальше хэши суммируются по-байтно. Но если сумма больше `0xEC`, то сохраняется остаток от деления на `0xEC`.
 
-Итоговый результат сохраняется по адресу `0xFFFFFFFF81C82F80`.
+```python
+
+import hashlib
+
+def get_email_hash(email):
+	
+	h = [0]*32
+
+	for sym in email:
+		
+		sha256 = hashlib.sha256(sym.encode()).digest()
+		for i in range(32):
+			s = h[i] + sha256[i]
+
+			if s <= 0xEC:
+				h[i] = s
+			else:
+				h[i] = s % 0xEC
+	return h
+```
+
+Сумма сохраняется по адресу `0xFFFFFFFF81C82F80`.
+
+Давайте посмотрим, какой будет хэш от почты `test@mail.ru`.
+
+Ставим брейк на `0xFFFFFFFF811F0748`:
+
+<p align="center">
+	<img src="https://github.com/mgayanov/micosoft_lunix/blob/master/img/ida_sum_hash.jpg">
+</p>
+
+И проверяем:
+```python
+>>> get_email_hash('test@mail.ru')
+2b902daf5cc483159b0a2f7ed6b593d1d56216a61eab53c8e4b9b9341fb14880
+```
+
 
 <details><summary>raw</summary>
 Перезапускаем
